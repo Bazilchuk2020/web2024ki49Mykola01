@@ -14,7 +14,7 @@ The point of this course is to create a modern dynamic website business card wit
 - Create website business card
 - Deploy 
 - Authentication
-- Create DDOS site
+- Create fishing site
 
 ### Student
 | Number | Student | Fraud |
