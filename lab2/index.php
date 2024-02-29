@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <title>My Website</title>
     <style>
         body {
@@ -22,7 +21,7 @@
         }
 
         header h1, nav ul li a {
-            color: #00cccc; /* Зміна коліру тексту на берюзовий */
+            color: #00cccc;
         }
 
         nav ul {
@@ -37,7 +36,7 @@
         }
 
         nav ul li a {
-            color: #00cccc; /* Зміна коліру тексту на берюзовий */
+            color: #00cccc;
             text-decoration: none;
         }
 
@@ -70,16 +69,15 @@
             color: #000;
         }
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
     <header>
         <h1>Welcome to My Website</h1>
         <nav>
             <ul>
-                <li><a href="home.php">Home</a></li>
-                <li><a href="about.php">About Me</a></li>
-                <li><a href="project.php">My Project</a></li>
+                <li><a href="#" onclick="loadPage('home.php')">Home</a></li>
+                <li><a href="#" onclick="loadPage('about.php')">About Me</a></li>
+                <li><a href="#" onclick="loadPage('project.php')">My Project</a></li>
             </ul>
         </nav>
     </header>
@@ -95,51 +93,51 @@
         ?>
     </div>
 
-    <form action="registration.php">
+    <form id="registrationForm" action="registration.php">
         <input type="submit" value="Go to Registration">
     </form>
 
+    <div class="form-btn ajax">
+        <input id="checkUsersBtn" type="submit" class="btn btn-primary" value="Check Users">
+    </div>
+
+    <div class="information"></div>
+
     <script>
-        // AJAX for loading pages without refreshing the whole page
-        $(document).ready(function(){
-            $('nav ul li a').click(function(e){
-                e.preventDefault();
-                var page = $(this).attr('href');
-                $('#content').load(page);
-            });
+        function loadPage(page) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    document.getElementById('content').innerHTML = xhr.responseText;
+                } else {
+                    console.error('AJAX Error:', xhr.statusText);
+                }
+            };
+            xhr.open('GET', page, true);
+            xhr.send();
+        }
+
+        function handleAjaxResponse(data) {
+            document.querySelector('.information').innerHTML = data;
+        }
+
+        document.getElementById('checkUsersBtn').addEventListener('click', function(event) {
+            event.preventDefault();
+            sendAjaxRequest();
         });
+
+        function sendAjaxRequest() {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    handleAjaxResponse(xhr.responseText);
+                } else {
+                    console.error('AJAX Error:', xhr.statusText);
+                }
+            };
+            xhr.open('GET', 'users.php', true);
+            xhr.send();
+        }
     </script>
 </body>
-<div class="form-btn ajax ">
-                <input type="submit" class="btn btn-primary" value="Check Users" >
-</div>
-<script>
-$(document).ready(function () {
-    function handleAjaxResponse(data) {
-    
-    $('.information').html(data);
-  }
-    $('.ajax').click(function (event) {
-        event.preventDefault();
-        sendAjaxRequest();
-    });
-
-    function sendAjaxRequest() {
-       
-        $.ajax({
-            url: 'users.php',
-            method: 'GET',
-            success: function (data) {
-               
-                handleAjaxResponse(data);
-            },
-            error: function (error) {
-                
-                console.error('AJAX Error:', error);
-            }
-        });
-    }
-});
-</script>
-<div class="information"></div>
 </html>
